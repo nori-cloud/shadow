@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>The Shadow - Scope of Work</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">The Shadow - Scope of Work</h1>
+</header>
+<h1 id="the-shadow">The Shadow</h1>
+<p><strong>Version:</strong> 1.0 <strong>Date:</strong> 25 Feb 2025</p>
+<h2 id="changelog">Changelog</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>25 Feb 2025</td>
+<td>Initial draft</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="brief">Brief</h2>
+<p>The Shadow is a prototype app where users express their feelings
+through an interface. A curated agent responds with a best-matching
+archetype and suggestions to help users understand their emotions.</p>
+<h2 id="client-info">Client Info</h2>
+<p>Name: Peter Lord Email: pete@caro.au</p>
+<h2 id="contractor-info">Contractor Info</h2>
+<p>Name: Norris Wu Email: work@norriswu.me</p>
+<h2 id="functional-requirement">Functional Requirement</h2>
+<ol type="1">
+<li><p>Setup project</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Codebase - Next.js, shadcn (UI
+components), Mastra (AI framework)</label></li>
+<li><label><input type="checkbox" />Deployment - Vercel default domain
+(e.g., <code>the-shadow-abc123.vercel.app</code>)</label></li>
+</ul></li>
+<li><p>Agent &amp; matching</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Configure DeepSeek agent in
+Mastra</label></li>
+<li><label><input type="checkbox" />Curate prompt to match input to
+best-fit archetype</label></li>
+<li><label><input type="checkbox" />Returns archetype + description +
+deeper question + suggestions</label></li>
+<li><label><input type="checkbox" />Test via Mastra
+playground</label></li>
+</ul>
+<p><em>Note: Client provides archetype definitions via Google Docs at
+kickoff meeting. Contractor reviews and ports to prototype. Together we
+define 3 test cases (sample input → expected archetype). Agent tuning
+complete when test cases pass consistently.</em></p>
+<p><em>Archetypes provided at kickoff are in scope. Additional
+archetypes after kickoff quoted separately - may require agent tuning
+and performance tweaks.</em></p></li>
+<li><p>Feeling → archetype flow</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Landing page - branding, intro copy,
+CTA</label></li>
+<li><label><input type="checkbox" />Input page - text input, suggested
+feeling tags, “Analyze” button</label></li>
+<li><label><input type="checkbox" />Result page - archetype name,
+description, deeper question, suggestions, “Start over”</label></li>
+</ul>
+<p>User stories:</p>
+<ul>
+<li><strong>Text input:</strong> User types feeling → gets
+archetype</li>
+<li><strong>Suggested feelings:</strong> User selects tags → gets
+archetype</li>
+</ul></li>
+</ol>
+<p><em>Note: Suggested feelings list to be discussed in kickoff meeting.
+If not finalized, will use wireframe defaults (Lonely, Irritable,
+Judgmental, Overwhelmed, Empty, Stuck).</em></p>
+<h2 id="use-cases">Use Cases</h2>
+<ol type="1">
+<li><p><strong>Express via text</strong> User types “I felt enraged when
+my partner interrupted me” → taps “Analyze my shadow” → sees “Tyrant
+King” archetype with explanation and suggestions.</p></li>
+<li><p><strong>Express via suggested feelings</strong> User selects
+[Lonely] + [Stuck] from tags → taps “Analyze my shadow” → sees matched
+archetype with guidance.</p></li>
+<li><p><strong>Reflect and restart</strong> User reads archetype result,
+reflects on “deeper question” → taps “Start over” → returns to input
+page for another session.</p></li>
+</ol>
+<h2 id="non-functional-requirement">Non-functional Requirement</h2>
+<ul>
+<li>Browser: Chrome, Firefox</li>
+<li>Mobile-first design, responsive to desktop</li>
+</ul>
+<h2 id="estimates-and-quote">Estimates and Quote</h2>
+<p>Hourly rate: <del>$120/hr</del> $100/hr (goodwill rate)</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Hours</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scoping &amp; analysis</td>
+<td>4</td>
+<td><del>$400</del> waived</td>
+</tr>
+<tr>
+<td>Setup project</td>
+<td>3</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Agent &amp; matching</td>
+<td>6</td>
+<td>$600</td>
+</tr>
+<tr>
+<td>Feeling → archetype flow</td>
+<td>5</td>
+<td>$500</td>
+</tr>
+<tr>
+<td>QA</td>
+<td>2</td>
+<td>$200</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>16</strong></td>
+<td><strong>$1,600</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Fixed price based on estimated hours.</em></p>
+<h2 id="additional-in-scope-item">Additional In Scope Item</h2>
+<ul>
+<li>Development environment setup</li>
+<li>Source code in GitHub repository</li>
+<li>Basic documentation</li>
+<li>Deployment and API costs during development (covered by
+contractor)</li>
+<li>2 rounds of UI revisions (additional rounds quoted separately)</li>
+</ul>
+<p><em>Note: If project proceeds to production, hosting and API costs to
+be discussed separately.</em></p>
+<h2 id="out-of-scope">Out of Scope</h2>
+<ul>
+<li>Production hosting costs</li>
+<li>Third-party API costs</li>
+<li>Ongoing maintenance</li>
+<li>Features not listed above</li>
+<li>Custom visual design (prototype uses shadcn defaults, presentable
+but not pixel-perfect)</li>
+<li>Edge case handling (prototype focuses on happy path)</li>
+</ul>
+<h2 id="timeline">Timeline</h2>
+<ul>
+<li><strong>Kickoff meeting:</strong> To be scheduled upon
+acceptance</li>
+<li><strong>Start:</strong> To be confirmed during acceptance
+(reference: next Monday)</li>
+<li><strong>Estimated delivery:</strong> 2 business days from start</li>
+</ul>
+<p><em>Client to prepare for kickoff: archetype definitions (Google
+Docs) and confirm suggested feelings list.</em></p>
+<h2 id="payment-terms">Payment Terms</h2>
+<ul>
+<li>50% ($800) upfront upon acceptance of this SOW</li>
+<li>50% ($800) upon completion</li>
+</ul>
+<p><em>Invoice with payment details to follow upon acceptance.</em></p>
+<h2 id="resource-ownership">Resource Ownership</h2>
+<p>During development: - Hosting account (Vercel) and API keys
+(DeepSeek) owned by contractor</p>
+<p>If prototype stays live beyond 7 days post completion: - DeepSeek API
+cost to be transferred to client - Deployment and codebase transferred
+upon request</p>
+<h2 id="intellectual-property">Intellectual Property</h2>
+<p>All project IP transfers to client upon final payment. Third-party
+libraries (shadcn, Mastra, etc.) remain under their respective licenses.
+Contractor retains right to reuse non-proprietary code patterns.</p>
+<h2 id="warranty">Warranty</h2>
+<p>Bug fixes for delivered functionality covered for 1 month after
+project completion. Does not cover new features or changes to
+requirements.</p>
+<h2 id="change-requests">Change Requests</h2>
+<p>Scope is confirmed upon acceptance of this SOW. Major changes to be
+discussed during workflow.</p>
+<h2 id="qa-process">QA Process</h2>
+<ol type="1">
+<li>Contractor tests all functional requirements against use cases</li>
+<li>Browser check (Chrome, Firefox)</li>
+<li>Mobile responsiveness check</li>
+<li>Bugs found → fixed within scope</li>
+<li>Final walkthrough with client</li>
+</ol>
+<p><strong>QA complete when:</strong> - All functional requirement
+checkboxes pass - No critical bugs on Chrome/Firefox - Mobile layout
+works - Both parties are happy with their money spent/earned</p>
+<h2 id="completion-criteria">Completion Criteria</h2>
+<p>Work is complete when all Functional Requirement items are checked
+off and QA is complete.</p>
+<h2 id="potential-next-step">Potential Next Step</h2>
+<p>If core experience validates, a follow-up engagement could include: -
+<strong>My Deck</strong> - save archetypes, view history, track patterns
+over time</p>
+<p><em>Requires database and user persistence - to be scoped
+separately.</em></p>
+<hr />
+<h2 id="acceptance">Acceptance</h2>
+<p>To accept this SOW, please reply confirming agreement. Upon
+acceptance, an invoice for the 50% deposit will be sent.</p>
+<p><strong>Client:</strong> Peter Lord Accepted: ☐ Yes Date:
+_____________</p>
+<p><strong>Contractor:</strong> Norris Wu Date: _____________</p>
+</body>
+</html>
