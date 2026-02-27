@@ -1,15 +1,28 @@
-# The Shadow
+<table width="100%">
+<tr>
+<td width="50%" valign="middle">
+<img src="../assets/ailuro_tech.png" alt="Ailuro Tech" width="150">
+</td>
+<td width="50%" align="right" valign="middle">
+<strong>Ailurotech Solutions Pty Ltd</strong><br>
+ABN: 13 673 935 263<br>
++61 474 212 611<br>
+contact@ailurotech.com.au<br>
+1-13 Sixth Street, Bowden, SA 5007
+</td>
+</tr>
+</table>
+# The Shadow - Prototype Agreement
 
-**Version:** 1.0
+**Version:** 1.1
 **Date:** 25 Feb 2025
 
 ## Changelog
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 25 Feb 2025 | Added letterhead, renamed to Prototype Agreement |
 | 1.0 | 25 Feb 2025 | Initial draft |
-
----
 
 ## Brief
 
@@ -18,30 +31,44 @@ The Shadow is a prototype app where users express their feelings through an inte
 ## Client Info
 
 Name: Peter Lord
+
 Email: pete@caro.au
+
+Company: Green Room Venture Pty Ltd
+
+ABN: 37 616 077 475
+
+Address: 79A Brooker Ave Beacon Hill NSW 2100
 
 ## Contractor Info
 
-Name: Norris Wu
-Email: work@norriswu.me
+Company: Ailurotech Solutions Pty Ltd
 
-## Functional Requirement
+Project Lead: Norris Wu
 
-1. Setup project
+Primary Contact: work@norriswu.me
+
+Phone Number: 0431 072 313
+
+Address: 1-13 Sixth Street, Bowden, SA 5007
+
+## Deliverables
+
+1. Project setup
    - Codebase - Next.js, shadcn (UI components), Mastra (AI framework)
    - Deployment - Vercel default domain (e.g., `the-shadow-abc123.vercel.app`)
 
-2. Agent & matching
+2. Archetype matching agent
    - Configure DeepSeek agent in Mastra
    - Curate prompt to match input to best-fit archetype
    - Returns archetype + description + deeper question + suggestions
-   - Test via Mastra playground
+   - Test interface for standalone agent validation
 
    *Note: Client provides archetype definitions via Google Docs at kickoff meeting. Contractor reviews and ports to prototype. Together we define 3 test cases (sample input → expected archetype). Agent tuning complete when test cases pass consistently.*
 
    *Archetypes provided at kickoff are in scope. Additional archetypes after kickoff quoted separately - may require agent tuning and performance tweaks.*
 
-3. Feeling → archetype flow
+3. User interface flow
    - Landing page - branding, intro copy, CTA
    - Input page - text input, suggested feeling tags, "Analyze" button
    - Result page - archetype name, description, deeper question, suggestions, "Start over"
@@ -110,8 +137,8 @@ Hourly rate: ~~$120/hr~~ $100/hr (goodwill rate)
 
 ## Timeline
 
-- **Kickoff meeting:** To be scheduled upon acceptance
-- **Start:** To be confirmed during acceptance (reference: next Monday)
+- **Kickoff meeting:** Monday, 2nd March 2026, 8.30am
+- **Start:** 2nd March 2026
 - **Estimated delivery:** 2 business days from start
 
 *Client to prepare for kickoff: archetype definitions (Google Docs) and confirm suggested feelings list.*
@@ -146,7 +173,7 @@ Scope is confirmed upon acceptance of this SOW. Major changes to be discussed du
 
 ## QA Process
 
-1. Contractor tests all functional requirements against use cases
+1. Contractor tests all deliverables against use cases
 2. Browser check (Chrome, Firefox)
 3. Mobile responsiveness check
 4. Bugs found → fixed within scope
@@ -160,7 +187,7 @@ Scope is confirmed upon acceptance of this SOW. Major changes to be discussed du
 
 ## Completion Criteria
 
-Work is complete when all Functional Requirement items are checked off and QA is complete.
+Work is complete when all Deliverable items are checked off and QA is complete.
 
 ## Potential Next Step
 
@@ -168,3 +195,35 @@ If core experience validates, a follow-up engagement could include:
 - **My Deck** - save archetypes, view history, track patterns over time
 
 *Requires database and user persistence - to be scoped separately.*
+
+## Acceptance
+
+By signing below, both parties agree to the terms outlined in this Prototype Agreement.
+
+**Client - Green Room Venture Pty Ltd**
+
+
+
+Name: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+
+
+Signature: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+
+
+Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+**Contractor - Ailurotech Solutions Pty Ltd**
+
+
+
+Name: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+
+
+Signature: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+
+
+Date: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
