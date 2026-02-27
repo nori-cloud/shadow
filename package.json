@@ -18,6 +18,7 @@
     "@mastra/loggers": "^1.0.2",
     "@mastra/memory": "^1.5.2",
     "@mastra/observability": "^1.2.1",
+    "@mastra/pg": "^1.7.0",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@rive-app/react-webgl2": "^4.27.0",
     "@streamdown/cjk": "^1.0.2",

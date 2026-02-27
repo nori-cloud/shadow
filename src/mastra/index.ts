@@ -1,7 +1,7 @@
 
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
-import { LibSQLStore } from '@mastra/libsql';
+import { PostgresStore } from '@mastra/pg';
 import { Observability, DefaultExporter, CloudExporter, SensitiveDataFilter } from '@mastra/observability';
 import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
@@ -10,12 +10,10 @@ import { weatherAgent } from './agents/weather-agent';
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
   agents: { weatherAgent },
-  storage: process.env.VERCEL
-    ? undefined // In-memory on Vercel (session-only)
-    : new LibSQLStore({
-        id: "mastra-storage",
-        url: "file:./mastra.db",
-      }),
+  storage: new PostgresStore({
+    id: 'mastra-storage',
+    connectionString: process.env.DATABASE_URL!,
+  }),
   logger: new PinoLogger({
     name: 'Mastra',
     level: 'info',
