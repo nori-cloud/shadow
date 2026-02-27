@@ -10,11 +10,12 @@ import { weatherAgent } from './agents/weather-agent';
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
   agents: { weatherAgent },
-  storage: new LibSQLStore({
-    id: "mastra-storage",
-    // stores observability, scores, ... into persistent file storage
-    url: "file:./mastra.db",
-  }),
+  storage: process.env.VERCEL
+    ? undefined // In-memory on Vercel (session-only)
+    : new LibSQLStore({
+        id: "mastra-storage",
+        url: "file:./mastra.db",
+      }),
   logger: new PinoLogger({
     name: 'Mastra',
     level: 'info',
