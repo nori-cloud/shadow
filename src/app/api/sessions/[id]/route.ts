@@ -24,12 +24,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     })
     const messages = (result?.messages ?? []).map(m => ({
       role: m.role,
-      text: Array.isArray(m.content)
-        ? m.content
-            .filter((c: { type: string }) => c.type === 'text')
-            .map((c: { text: string }) => c.text)
-            .join('')
-        : String(m.content ?? ''),
+      text: (m.content?.parts ?? [])
+        .filter((p: { type: string }) => p.type === 'text')
+        .map((p: { text: string }) => p.text)
+        .join(''),
     }))
     return NextResponse.json(messages)
   } catch {
