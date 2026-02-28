@@ -137,7 +137,7 @@ export default function ChatPage() {
                         <Tool key={`${message.id}-${i}`} className="my-2">
                           <ToolHeader
                             type={(part as ToolUIPart).type}
-                            state={(part as ToolUIPart).state || 'output-available'}
+                            state={(part as ToolUIPart).state || ((part as ToolUIPart).errorText ? 'error' : 'output-available')}
                             className="cursor-pointer"
                           />
                           <ToolContent>
