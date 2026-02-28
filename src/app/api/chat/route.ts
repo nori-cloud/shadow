@@ -1,14 +1,14 @@
 import { handleChatStream } from '@mastra/ai-sdk'
 import { toAISdkV5Messages } from '@mastra/ai-sdk/ui'
 import { createUIMessageStreamResponse } from 'ai'
+import { cookies } from 'next/headers'
 import { mastra } from '@/mastra'
 import { NextResponse } from 'next/server'
 
 const RESOURCE_ID = 'weather-chat'
 
 export async function POST(req: Request) {
-  const url = new URL(req.url)
-  const sessionId = url.searchParams.get('sessionId')
+  const sessionId = (await cookies()).get('chat-session')?.value
 
   if (!sessionId) {
     return NextResponse.json({ error: 'sessionId required' }, { status: 400 })
@@ -30,9 +30,8 @@ export async function POST(req: Request) {
   return createUIMessageStreamResponse({ stream })
 }
 
-export async function GET(req: Request) {
-  const url = new URL(req.url)
-  const sessionId = url.searchParams.get('sessionId')
+export async function GET() {
+  const sessionId = (await cookies()).get('chat-session')?.value
 
   if (!sessionId) {
     return NextResponse.json({ error: 'sessionId required' }, { status: 400 })

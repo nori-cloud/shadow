@@ -9,19 +9,31 @@ interface SessionState {
 
 const generateId = () => crypto.randomUUID()
 
+const COOKIE_NAME = 'chat-session'
+
+const setSessionCookie = (id: string) => {
+  document.cookie = `${COOKIE_NAME}=${id}; path=/; samesite=lax`
+}
+
 export const useSessionStore = create<SessionState>()(
   persist(
     (set, get) => ({
       sessionId: null,
       getOrCreateSessionId: () => {
         const current = get().sessionId
-        if (current) return current
+        if (current) {
+          setSessionCookie(current)
+          return current
+        }
         const newId = generateId()
         set({ sessionId: newId })
+        setSessionCookie(newId)
         return newId
       },
       clearSession: () => {
-        set({ sessionId: generateId() })
+        const newId = generateId()
+        set({ sessionId: newId })
+        setSessionCookie(newId)
       },
     }),
     {

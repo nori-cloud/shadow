@@ -31,15 +31,13 @@ export default function ChatPage() {
   const { getOrCreateSessionId, clearSession } = useSessionStore()
   const [sessionId, setSessionId] = useState<string | null>(null)
 
-  // Initialize session ID on mount (client-side only)
+  // Initialize session ID on mount (sets cookie automatically)
   useEffect(() => {
     setSessionId(getOrCreateSessionId())
   }, [getOrCreateSessionId])
 
   const { messages, setMessages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: sessionId ? `/api/chat?sessionId=${sessionId}` : '/api/chat',
-    }),
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
   })
 
   // Fetch existing messages when session ID is available
@@ -47,7 +45,7 @@ export default function ChatPage() {
     if (!sessionId) return
 
     const fetchMessages = async () => {
-      const res = await fetch(`/api/chat?sessionId=${sessionId}`)
+      const res = await fetch('/api/chat')
       const data = await res.json()
       if (!data.error) {
         setMessages([...data])
