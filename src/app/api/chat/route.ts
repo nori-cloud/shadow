@@ -4,10 +4,16 @@ import { createUIMessageStreamResponse } from 'ai'
 import { mastra } from '@/mastra'
 import { NextResponse } from 'next/server'
 
-const THREAD_ID = 'example-user-id'
 const RESOURCE_ID = 'weather-chat'
 
 export async function POST(req: Request) {
+  const url = new URL(req.url)
+  const sessionId = url.searchParams.get('sessionId')
+
+  if (!sessionId) {
+    return NextResponse.json({ error: 'sessionId required' }, { status: 400 })
+  }
+
   const params = await req.json()
   const stream = await handleChatStream({
     mastra,
@@ -16,7 +22,7 @@ export async function POST(req: Request) {
       ...params,
       memory: {
         ...params.memory,
-        thread: THREAD_ID,
+        thread: sessionId,
         resource: RESOURCE_ID,
       },
     },
@@ -24,13 +30,20 @@ export async function POST(req: Request) {
   return createUIMessageStreamResponse({ stream })
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url)
+  const sessionId = url.searchParams.get('sessionId')
+
+  if (!sessionId) {
+    return NextResponse.json({ error: 'sessionId required' }, { status: 400 })
+  }
+
   const memory = await mastra.getAgentById('weather-agent').getMemory()
   let response = null
 
   try {
     response = await memory?.recall({
-      threadId: THREAD_ID,
+      threadId: sessionId,
       resourceId: RESOURCE_ID,
     })
   } catch {

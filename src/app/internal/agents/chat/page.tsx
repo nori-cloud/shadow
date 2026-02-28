@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { DefaultChatTransport, ToolUIPart } from 'ai'
 import { useChat } from '@ai-sdk/react'
-import { Cloud, Send, Loader2 } from 'lucide-react'
+import { Cloud, Send, Loader2, RotateCcw } from 'lucide-react'
 
 import {
   PromptInput,
@@ -23,29 +23,49 @@ import { Message, MessageContent, MessageResponse } from '@/components/ai-elemen
 import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from '@/components/ai-elements/tool'
 
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { useSessionStore } from '@/stores/session-store'
 
 export default function ChatPage() {
   const [input, setInput] = useState('')
+  const { getOrCreateSessionId, clearSession } = useSessionStore()
+  const [sessionId, setSessionId] = useState<string | null>(null)
+
+  // Initialize session ID on mount (client-side only)
+  useEffect(() => {
+    setSessionId(getOrCreateSessionId())
+  }, [getOrCreateSessionId])
 
   const { messages, setMessages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
-      api: '/api/chat',
+      api: sessionId ? `/api/chat?sessionId=${sessionId}` : '/api/chat',
     }),
   })
 
+  // Fetch existing messages when session ID is available
   useEffect(() => {
+    if (!sessionId) return
+
     const fetchMessages = async () => {
-      const res = await fetch('/api/chat')
+      const res = await fetch(`/api/chat?sessionId=${sessionId}`)
       const data = await res.json()
-      setMessages([...data])
+      if (!data.error) {
+        setMessages([...data])
+      }
     }
     fetchMessages()
-  }, [setMessages])
+  }, [sessionId, setMessages])
 
   const handleSubmit = async () => {
-    if (!input.trim()) return
+    if (!input.trim() || !sessionId) return
     sendMessage({ text: input })
     setInput('')
+  }
+
+  const handleNewSession = () => {
+    clearSession()
+    setSessionId(getOrCreateSessionId())
+    setMessages([])
   }
 
   const isLoading = status === 'streaming' || status === 'submitted'
@@ -64,10 +84,22 @@ export default function ChatPage() {
               <p className="text-xs text-muted-foreground">Powered by Mastra</p>
             </div>
           </div>
-          <Badge variant={isLoading ? 'default' : 'secondary'} className="gap-1.5">
-            {isLoading && <Loader2 className="h-3 w-3 animate-spin" />}
-            {isLoading ? 'Thinking...' : 'Ready'}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleNewSession}
+              disabled={isLoading}
+              className="gap-1.5"
+            >
+              <RotateCcw className="h-3.5 w-3.5" />
+              New Chat
+            </Button>
+            <Badge variant={isLoading ? 'default' : 'secondary'} className="gap-1.5">
+              {isLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+              {isLoading ? 'Thinking...' : 'Ready'}
+            </Badge>
+          </div>
         </div>
       </header>
 
@@ -140,11 +172,11 @@ export default function ChatPage() {
                 onChange={e => setInput(e.target.value)}
                 value={input}
                 placeholder="Ask about the weather..."
-                disabled={isLoading}
+                disabled={isLoading || !sessionId}
                 className="min-h-[52px] resize-none border-0 bg-transparent px-4 py-3 focus-visible:ring-0"
               />
               <PromptInputSubmit
-                disabled={isLoading || !input.trim()}
+                disabled={isLoading || !input.trim() || !sessionId}
                 className="mr-2 h-9 w-9 rounded-lg"
               >
                 {isLoading ? (
