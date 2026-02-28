@@ -1,9 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Cormorant_Garamond } from 'next/font/google'
-import { DefaultChatTransport } from 'ai'
-import { useChat } from '@ai-sdk/react'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -29,20 +27,7 @@ interface AnalysisResult {
   invitation: string
 }
 
-type AppState = 'input' | 'card' | 'dialogue'
-
-// ─── Session ──────────────────────────────────────────────────────────────────
-
-const SHADOW_COOKIE = 'shadow-session'
-
-function getShadowSession(): string {
-  if (typeof document === 'undefined') return ''
-  const match = document.cookie.match(new RegExp(`(?:^|; )${SHADOW_COOKIE}=([^;]*)`))
-  if (match) return decodeURIComponent(match[1])
-  const id = crypto.randomUUID()
-  document.cookie = `${SHADOW_COOKIE}=${id}; path=/; samesite=lax`
-  return id
-}
+type AppState = 'input' | 'card'
 
 // ─── Emotion Tags ─────────────────────────────────────────────────────────────
 
@@ -57,23 +42,6 @@ export default function ShadowPage() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [isAnalysing, setIsAnalysing] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [dialogueSeeded, setDialogueSeeded] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setSessionId(getShadowSession())
-  }, [])
-
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: '/api/shadow/chat' }),
-  })
-
-  const isChatLoading = status === 'streaming' || status === 'submitted'
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
 
   const handleEmotionTag = (tag: string) => {
     setSelectedTags(prev => {
@@ -106,34 +74,12 @@ export default function ShadowPage() {
     }
   }
 
-  const handleGoDeeper = () => {
-    if (!analysis || !sessionId) return
-    setAppState('dialogue')
-    if (!dialogueSeeded) {
-      setDialogueSeeded(true)
-      const seed = `I just received my shadow archetype reading.
-
-Archetype: ${analysis.archetypeName} — shadow: ${analysis.shadowName}
-
-${analysis.matchReason}
-
-The question that surfaced: "${analysis.deeperQuestion}"
-
-I'd like to explore this.`
-      sendMessage({ text: seed })
-    }
-  }
-
   const handleReset = () => {
     setAppState('input')
     setAnalysis(null)
     setInputText('')
     setSelectedTags(new Set())
     setError(null)
-    setDialogueSeeded(false)
-    const id = crypto.randomUUID()
-    document.cookie = `${SHADOW_COOKIE}=${id}; path=/; samesite=lax`
-    setSessionId(id)
   }
 
   return (
@@ -188,18 +134,7 @@ I'd like to explore this.`
         {appState === 'card' && analysis && (
           <CardView
             analysis={analysis}
-            onGoDeeper={handleGoDeeper}
             onReset={handleReset}
-          />
-        )}
-        {appState === 'dialogue' && analysis && (
-          <DialogueView
-            analysis={analysis}
-            messages={messages}
-            isLoading={isChatLoading}
-            onSend={(text) => sendMessage({ text })}
-            onReset={handleReset}
-            messagesEndRef={messagesEndRef}
           />
         )}
       </div>
@@ -384,11 +319,9 @@ function InputView({
 
 function CardView({
   analysis,
-  onGoDeeper,
   onReset,
 }: {
   analysis: AnalysisResult
-  onGoDeeper: () => void
   onReset: () => void
 }) {
   return (
@@ -416,8 +349,8 @@ function CardView({
             transition: 'color 0.15s',
             fontFamily: 'var(--font-geist-sans)',
           }}
-          onMouseEnter={e => { (e.currentTarget).style.color = '#7a6e60' }}
-          onMouseLeave={e => { (e.currentTarget).style.color = '#4a4338' }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#7a6e60' }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#4a4338' }}
         >
           ← Start over
         </button>
@@ -427,7 +360,6 @@ function CardView({
           border: '1px solid rgba(196,152,90,0.15)',
           borderRadius: '12px',
           padding: '2.5rem',
-          marginBottom: '1.5rem',
         }}>
           <div style={{ marginBottom: '2rem' }}>
             <p style={{
@@ -533,269 +465,7 @@ function CardView({
             </ol>
           </div>
         </div>
-
-        <button
-          onClick={onGoDeeper}
-          style={{
-            width: '100%',
-            padding: '1rem',
-            background: 'rgba(196,152,90,0.1)',
-            border: '1px solid rgba(196,152,90,0.3)',
-            borderRadius: '8px',
-            color: '#c4985a',
-            fontSize: '1.125rem',
-            letterSpacing: '0.02em',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            fontFamily: 'var(--font-cormorant)',
-            fontStyle: 'italic',
-            fontWeight: 400,
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(196,152,90,0.16)'
-            e.currentTarget.style.borderColor = 'rgba(196,152,90,0.5)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(196,152,90,0.1)'
-            e.currentTarget.style.borderColor = 'rgba(196,152,90,0.3)'
-          }}
-        >
-          Go deeper →
-        </button>
       </div>
-    </div>
-  )
-}
-
-// ─── Dialogue View ────────────────────────────────────────────────────────────
-
-function DialogueView({
-  analysis,
-  messages,
-  isLoading,
-  onSend,
-  onReset,
-  messagesEndRef,
-}: {
-  analysis: AnalysisResult
-  messages: ReturnType<typeof useChat>['messages']
-  isLoading: boolean
-  onSend: (text: string) => void
-  onReset: () => void
-  messagesEndRef: React.RefObject<HTMLDivElement | null>
-}) {
-  const [chatInput, setChatInput] = useState('')
-
-  const handleSubmit = () => {
-    if (!chatInput.trim() || isLoading) return
-    onSend(chatInput)
-    setChatInput('')
-  }
-
-  // Skip the seeded first user message
-  const displayMessages = messages.slice(1)
-
-  return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header style={{
-        borderBottom: '1px solid rgba(196,152,90,0.1)',
-        padding: '1rem 1.5rem',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: 'rgba(12,11,9,0.8)',
-        backdropFilter: 'blur(8px)',
-        flexShrink: 0,
-      }}>
-        <div>
-          <p style={{
-            fontSize: '0.7rem',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: '#c4985a',
-            margin: 0,
-            fontFamily: 'var(--font-geist-sans)',
-          }}>
-            Exploring
-          </p>
-          <h2 style={{
-            fontFamily: 'var(--font-cormorant)',
-            fontSize: '1.375rem',
-            fontWeight: 500,
-            color: '#e8e0d4',
-            margin: 0,
-          }}>
-            {analysis.archetypeName}
-            <span style={{ color: '#4a4338', fontStyle: 'italic', fontWeight: 300 }}>
-              {' '}/ {analysis.shadowName}
-            </span>
-          </h2>
-        </div>
-        <button
-          onClick={onReset}
-          style={{
-            background: 'none',
-            border: '1px solid rgba(196,152,90,0.15)',
-            borderRadius: '6px',
-            color: '#4a4338',
-            fontSize: '0.75rem',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-            padding: '0.4rem 0.875rem',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-            fontFamily: 'var(--font-geist-sans)',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.color = '#7a6e60'
-            e.currentTarget.style.borderColor = 'rgba(196,152,90,0.3)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.color = '#4a4338'
-            e.currentTarget.style.borderColor = 'rgba(196,152,90,0.15)'
-          }}
-        >
-          End
-        </button>
-      </header>
-
-      <main style={{
-        flex: 1,
-        overflowY: 'auto',
-        padding: '2rem 1.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        maxWidth: '680px',
-        width: '100%',
-        margin: '0 auto',
-        boxSizing: 'border-box',
-      }}>
-        {displayMessages.length === 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-            <p style={{
-              fontFamily: 'var(--font-cormorant)',
-              fontSize: '1.125rem',
-              fontStyle: 'italic',
-              color: '#4a4338',
-              textAlign: 'center',
-            }}>
-              {isLoading ? 'The shadow speaks…' : 'Beginning the descent…'}
-            </p>
-          </div>
-        )}
-
-        {displayMessages.map(message => {
-          const isUser = message.role === 'user'
-          const textPart = message.parts?.find((p) => p.type === 'text') as { type: 'text'; text: string } | undefined
-          const text = textPart?.text ?? ''
-          if (!text) return null
-          return (
-            <div key={message.id} style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start' }}>
-              <div style={{
-                maxWidth: '80%',
-                padding: isUser ? '0.75rem 1.125rem' : '1rem 0',
-                background: isUser ? 'rgba(196,152,90,0.08)' : 'transparent',
-                border: isUser ? '1px solid rgba(196,152,90,0.15)' : 'none',
-                borderRadius: isUser ? '12px 12px 4px 12px' : '0',
-                borderLeft: !isUser ? '2px solid rgba(196,152,90,0.2)' : undefined,
-                paddingLeft: !isUser ? '1.25rem' : undefined,
-              }}>
-                <p style={{
-                  margin: 0,
-                  lineHeight: 1.75,
-                  color: isUser ? '#b8aa98' : '#d4c9b8',
-                  fontFamily: isUser ? 'var(--font-geist-sans)' : 'var(--font-cormorant)',
-                  fontSize: isUser ? '0.9375rem' : '1.125rem',
-                  fontWeight: isUser ? 400 : 300,
-                }}>
-                  {text}
-                </p>
-              </div>
-            </div>
-          )
-        })}
-
-        {isLoading && displayMessages.length > 0 && (
-          <div style={{ paddingLeft: '1.25rem', borderLeft: '2px solid rgba(196,152,90,0.2)' }}>
-            <span style={{ color: '#4a4338', fontFamily: 'var(--font-cormorant)', fontStyle: 'italic' }}>
-              thinking…
-            </span>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
-      </main>
-
-      <footer style={{
-        borderTop: '1px solid rgba(196,152,90,0.1)',
-        padding: '1rem 1.5rem',
-        background: 'rgba(12,11,9,0.8)',
-        backdropFilter: 'blur(8px)',
-        flexShrink: 0,
-      }}>
-        <div style={{
-          maxWidth: '680px',
-          margin: '0 auto',
-          display: 'flex',
-          gap: '0.75rem',
-          alignItems: 'flex-end',
-        }}>
-          <textarea
-            value={chatInput}
-            onChange={e => setChatInput(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                handleSubmit()
-              }
-            }}
-            placeholder="Say something…"
-            disabled={isLoading}
-            rows={1}
-            style={{
-              flex: 1,
-              background: '#15130f',
-              border: '1px solid rgba(196,152,90,0.15)',
-              borderRadius: '8px',
-              padding: '0.75rem 1rem',
-              color: '#e8e0d4',
-              fontSize: '0.9375rem',
-              lineHeight: 1.6,
-              resize: 'none',
-              outline: 'none',
-              fontFamily: 'var(--font-geist-sans)',
-              minHeight: '44px',
-              maxHeight: '120px',
-              overflowY: 'auto',
-              transition: 'border-color 0.2s',
-              boxSizing: 'border-box',
-            }}
-            onFocus={e => { e.target.style.borderColor = 'rgba(196,152,90,0.35)' }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(196,152,90,0.15)' }}
-          />
-          <button
-            onClick={handleSubmit}
-            disabled={isLoading || !chatInput.trim()}
-            style={{
-              padding: '0 1.25rem',
-              background: 'rgba(196,152,90,0.12)',
-              border: '1px solid rgba(196,152,90,0.3)',
-              borderRadius: '8px',
-              color: isLoading || !chatInput.trim() ? '#4a4338' : '#c4985a',
-              fontSize: '0.875rem',
-              cursor: isLoading || !chatInput.trim() ? 'not-allowed' : 'pointer',
-              transition: 'all 0.15s',
-              letterSpacing: '0.04em',
-              fontFamily: 'var(--font-geist-sans)',
-              flexShrink: 0,
-              height: '44px',
-            }}
-          >
-            Send
-          </button>
-        </div>
-      </footer>
     </div>
   )
 }
