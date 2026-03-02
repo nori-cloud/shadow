@@ -14,6 +14,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'archetypeName required' }, { status: 400 })
     }
 
+    if (archetypeName.length > 100) {
+      return NextResponse.json({ error: 'archetypeName too long' }, { status: 400 })
+    }
+
     // Format messages as plain role/content pairs for the agent
     const formatted = messages
       .filter((m: { role: string; content: string }) => m.content?.trim())
