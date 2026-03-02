@@ -6,11 +6,12 @@ import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
 import { shadowAnalyst } from './agents/shadow-analyst';
 import { shadowDialogue } from './agents/shadow-dialogue';
+import { shadowReflection } from './agents/shadow-reflection';
 
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
-  agents: { weatherAgent, shadowAnalyst, shadowDialogue },
+  agents: { weatherAgent, shadowAnalyst, shadowDialogue, shadowReflection },
   storage: new PostgresStore({
     id: 'mastra-storage',
     connectionString: process.env.DATABASE_URL!,
