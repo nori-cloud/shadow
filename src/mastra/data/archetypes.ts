@@ -8,7 +8,7 @@ export interface Archetype {
   gift: string
   shadow: string
   lifeStage: string
-  jungSaid: string
+  wisdom: string
   invitation: string
   deeperQuestion: string
   exercise: string[]
@@ -35,7 +35,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Innocent sees the world as it could be. They believe in goodness, in happy endings, in the fundamental rightness of things. They\'re the one who still trusts after betrayal, who hopes after disappointment, who believes in you when you\'ve forgotten how. It takes guts to keep trusting a world that keeps proving trust risky. The Innocent reminds us that cynicism is easy. Trust is the real revolution.',
     shadow: 'The Innocent who refuses to grow up becomes the Denier. The one who can\'t see reality because it\'s too painful, who pretends everything\'s fine when it\'s clearly not, who trusts because they\'re too afraid to question. They enable abusers by believing the best in everyone. They call it faith; it\'s actually fear.',
     lifeStage: 'When you\'ve been hurt and still choose trust. At the beginning of anything. When cynicism tempts and you resist. When someone needs to believe.',
-    jungSaid: 'The Innocent carries our capacity for trust, for hope, for faith. But the mature Innocent has seen darkness and chosen light anyway. The one who\'s never been tested isn\'t innocent—they\'re just inexperienced.',
+    wisdom: 'The Innocent carries our capacity for trust, for hope, for faith. But the mature Innocent has seen darkness and chosen light anyway. The one who\'s never been tested isn\'t innocent—they\'re just inexperienced.',
     invitation: 'To trust without being naive. To hope without denying reality. To believe in goodness because you\'ve chosen to, not because you\'ve never seen the alternative. The Innocent\'s greatest gift is this: I still believe in you. I still believe in us. I still believe.',
     deeperQuestion: 'What are you refusing to see because seeing it would shatter the world you need to believe in?',
     exercise: [
@@ -62,7 +62,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Orphan shows up when you need to know you\'re not alone. They\'re the friend who\'s been there too, the stranger who says "me too." The Orphan reminds us that most of life is ordinary, and that\'s not failure—that\'s fellowship. You don\'t need to be a hero to be loved. You just need to show up.',
     shadow: 'The Orphan who can\'t bear their own uniqueness becomes the Victim. The one who refuses power, who stays small because small is safe, who blames others for their circumstances. The shadow Orphan confuses solidarity with dependency. They call it loyalty; it\'s really fear of standing alone.',
     lifeStage: 'When you\'re starting over. When you\'ve lost your tribe. When you need to know you\'re not the only one. When exceptionalism has exhausted you.',
-    jungSaid: 'The Everyperson connects us to the collective, to the ordinary, to the shared human experience. But we must also individuate—become who we uniquely are. The Orphan who never leaves the tribe never finds themselves.',
+    wisdom: 'The Everyperson connects us to the collective, to the ordinary, to the shared human experience. But we must also individuate—become who we uniquely are. The Orphan who never leaves the tribe never finds themselves.',
     invitation: 'To belong without losing yourself. To find your people and still stand alone when you must. To know that ordinary is not inferior. The Orphan\'s greatest gift is this: You\'re not alone. I\'m here too. We\'ll figure it out together.',
     deeperQuestion: 'What would you risk if you stopped needing others to struggle alongside you?',
     exercise: [
@@ -89,7 +89,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Warrior shows up when there\'s a battle to be fought. Not for glory—for what\'s right. The Warrior draws the line, says "no further," and means it. They\'re the one who stands between the bully and the vulnerable. They remind us that courage isn\'t the absence of fear. It\'s fear taking a back seat.',
     shadow: 'The Warrior who hasn\'t made peace with their own violence becomes the aggressor. The one who needs enemies. Who turns every disagreement into a war. The shadow Warrior confuses strength with domination, protection with control. They fight because they don\'t know who they are without a battle. Peace feels like death.',
     lifeStage: 'When something precious is threatened. When injustice demands a response. When someone must stand firm.',
-    jungSaid: 'The Warrior archetype channels our aggressive energy toward purposeful action. Without integration, that aggression turns inward (self-destruction) or outward unchecked (violence). The mature Warrior fights for something, not just against.',
+    wisdom: 'The Warrior archetype channels our aggressive energy toward purposeful action. Without integration, that aggression turns inward (self-destruction) or outward unchecked (violence). The mature Warrior fights for something, not just against.',
     invitation: 'To know what you\'d die for—and what you\'d kill for. To fight with discipline, not rage. To protect without becoming the thing you\'re fighting against. The Warrior\'s greatest gift is this: I will stand. I will not yield. You are safe behind me.',
     deeperQuestion: 'What are you fighting that is actually a mirror of something you haven\'t faced in yourself?',
     exercise: [
@@ -115,7 +115,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Caregiver gives without being asked. They anticipate needs, show up in darkness, and hold space without judgment. Their presence says: you matter. They build the world that others get to live in—the warm home, the steady friendship, the team that actually functions. The Caregiver reminds us that love is a verb.',
     shadow: 'The Caregiver who cannot receive becomes the Martyr. The one who gives to control, who resents those they help but can\'t stop. The shadow Caregiver collects people who need them—evidence of their worth. They mistake burnout for virtue and resentment for love. They\'ll sacrifice everything and then wonder why no one appreciates it.',
     lifeStage: 'When someone you love needs you. When you\'ve been giving more than you have. When the cost of care finally shows.',
-    jungSaid: 'The Caregiver is the archetype of agape—unconditional love. But the shadow emerges when care becomes a way to avoid one\'s own wounds. True caregiving requires a self to give from.',
+    wisdom: 'The Caregiver is the archetype of agape—unconditional love. But the shadow emerges when care becomes a way to avoid one\'s own wounds. True caregiving requires a self to give from.',
     invitation: 'To care without losing yourself. To receive as well as give. To know that you cannot pour from an empty vessel—and that filling yourself is not selfish. The Caregiver\'s greatest gift is this: I see you. You don\'t have to ask.',
     deeperQuestion: 'What would you feel if no one needed you? What are you avoiding by staying needed?',
     exercise: [
@@ -141,7 +141,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Seeker shows up when the well-worn path feels like a cage. They are restless in the right way—always looking for what\'s true, what\'s real, what\'s possible. They bring back maps from the edges. They remind us that there\'s always more, always further, always another horizon worth crossing. The Seeker earns their wisdom the hard way: by going.',
     shadow: 'The Seeker who cannot commit becomes the Wanderer. Perpetually dissatisfied, unable to arrive, running from intimacy under the guise of freedom. The shadow Seeker confuses movement with growth, novelty with depth. They leave every good thing just before it becomes real. Their greatest fear: that arriving somewhere means becoming who they were running from.',
     lifeStage: 'When the old life no longer fits. When you don\'t know who you are without the roles you\'ve been playing. When something is calling and you don\'t know its name.',
-    jungSaid: 'The Seeker archetype drives individuation—the journey toward becoming oneself. But Jung warned: the journey inward is more dangerous than any outward quest. The true explorer eventually turns around and goes home.',
+    wisdom: 'The Seeker archetype drives individuation—the journey toward becoming oneself. But Jung warned: the journey inward is more dangerous than any outward quest. The true explorer eventually turns around and goes home.',
     invitation: 'To seek without fleeing. To explore without abandoning. To know that home is not a cage—it\'s a place you choose to return to. The Seeker\'s greatest gift is this: There is more. Let me show you where I\'ve been.',
     deeperQuestion: 'What are you actually running from, and what would you find if you stopped?',
     exercise: [
@@ -167,7 +167,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Lover shows up when walls need to come down. They don\'t just love someone—they love life itself. They taste food like it\'s a sacrament. They feel music in their bones. They weep at beauty. The Lover reminds us that connection is the point. That the deepest human experiences happen in the space between.',
     shadow: 'The Lover who can\'t bear their own emptiness becomes the Addict. The one who mistakes intensity for intimacy, who needs to merge because they can\'t bear to be alone. The shadow Lover moves from person to person, high to high—never satisfied, always hungry. They confuse love with need. Their greatest fear: that if no one wants them, they don\'t exist.',
     lifeStage: 'When you fall in love. When you lose someone. When beauty breaks you open. When you realize you\'ve been hiding.',
-    jungSaid: 'The Lover connects us to Eros—the principle of relatedness, of feeling, of connection. Without it, we become dry, isolated, theoretical. But the Lover must also honor the boundaries that make true intimacy possible. Merging isn\'t love. Love requires two.',
+    wisdom: 'The Lover connects us to Eros—the principle of relatedness, of feeling, of connection. Without it, we become dry, isolated, theoretical. But the Lover must also honor the boundaries that make true intimacy possible. Merging isn\'t love. Love requires two.',
     invitation: 'To let yourself want. To risk rejection. To love without losing yourself. The Lover\'s greatest gift is this: I choose you. I choose this. I\'m here, all of me.',
     deeperQuestion: 'Are you loving this person, or are you using them to avoid the silence of your own company?',
     exercise: [
@@ -194,7 +194,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Creator sees what isn\'t there yet. They birth things into the world—ideas, art, movements, solutions. They remind us that we\'re all made in the image of something that creates. That the universe itself is an act of imagination.',
     shadow: 'The Creator who can\'t face their own emptiness becomes the Perfectionist. The one who destroys their own work because it\'s never good enough. Who creates for applause, not for joy. Paralyzed by standards no human could meet. They start a thousand projects, finish none. Their greatest fear: that they have nothing to say.',
     lifeStage: 'When something inside demands expression. When the world needs what only you can bring. In the fertile silence before birth.',
-    jungSaid: 'The creative instinct is fundamental—as basic as sex or hunger. To suppress it is to wound the soul. But the Creator must also learn to destroy: to kill their darlings, to let go of what no longer serves.',
+    wisdom: 'The creative instinct is fundamental—as basic as sex or hunger. To suppress it is to wound the soul. But the Creator must also learn to destroy: to kill their darlings, to let go of what no longer serves.',
     invitation: 'To create for the sake of creating. To finish things. To let your work leave your hands and live its own life. The Creator\'s greatest gift is this: I made this. It didn\'t exist. Now it does.',
     deeperQuestion: 'What would you make if you knew no one would ever see it?',
     exercise: [
@@ -220,7 +220,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Destroyer shows up when something has to die. They\'re the one who walks away from the toxic relationship everyone else pretends is fine. Who shuts down the failing project. Who tells the truth that ends the charade. The Destroyer reminds us that death is not the enemy. Stagnation is.',
     shadow: 'The Destroyer who can\'t create becomes the nihilist. The one who tears down without building, who mistakes destruction for truth, who hates because hating feels powerful. They burn the house down and call it liberation. Their greatest fear: that nothing new will grow in the ashes.',
     lifeStage: 'When something must end. When the old way is killing you. When you need to walk away. When you\'re the one who has to deliver bad news.',
-    jungSaid: 'Destruction is not the opposite of creation—it\'s part of the cycle. The Destroyer archetype carries our capacity for necessary endings. But without the Creator, without vision, destruction becomes mere violence.',
+    wisdom: 'Destruction is not the opposite of creation—it\'s part of the cycle. The Destroyer archetype carries our capacity for necessary endings. But without the Creator, without vision, destruction becomes mere violence.',
     invitation: 'To know what must die. To end things with compassion, not cruelty. To trust that new life will come. The Destroyer\'s greatest gift is this: This is over. You\'ll survive. Something new awaits.',
     deeperQuestion: 'What are you destroying that you haven\'t admitted you\'re destroying?',
     exercise: [
@@ -246,7 +246,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Ruler sees the whole system. They organize chaos, create structure so others can thrive. The Ruler takes responsibility—for decisions, for people, for outcomes. They remind us that order serves freedom. That good leadership is stewardship.',
     shadow: 'The Ruler who hasn\'t made peace with their own powerlessness becomes the Tyrant. The one who needs control, who crushes dissent, who confuses their position with their worth. The shadow Ruler governs through fear. They\'re threatened by talent, suspicious of independence, addicted to loyalty oaths. They\'ll destroy the kingdom to prove they\'re king.',
     lifeStage: 'When chaos demands structure. When people need leadership. When legacy matters. When you\'re put in charge whether you wanted it or not.',
-    jungSaid: 'The Ruler archetype connects us to the need for containment and order. But the mature Ruler knows they serve something larger—the kingdom, the people, the values. Not their own ego. The Ruler who forgets they serve becomes what they were meant to protect against.',
+    wisdom: 'The Ruler archetype connects us to the need for containment and order. But the mature Ruler knows they serve something larger—the kingdom, the people, the values. Not their own ego. The Ruler who forgets they serve becomes what they were meant to protect against.',
     invitation: 'To lead from service, not ego. To create structures that liberate. To know that your reign will end—and to build something that outlasts you. The Ruler\'s greatest gift is this: I\'ve got this. You\'re safe here. Do your best work.',
     deeperQuestion: 'Are you leading to serve your people, or are you using your people to feel in control?',
     exercise: [
@@ -272,7 +272,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Magician sees what others miss. They understand that reality isn\'t fixed—it\'s malleable. They\'re the therapist who helps you reframe your story, the alchemist who turns lead to gold, the innovator who finds the leverage point. The Magician reminds us that we have more power than we know. That transformation is possible.',
     shadow: 'The Magician who hasn\'t done their own inner work becomes the Manipulator. The one who uses insight to control, who seduces rather than serves, who creates dependency. They deal in secrets, withhold knowledge, speak in riddles to maintain power. They\'ll dazzle you so you don\'t notice you\'re being used.',
     lifeStage: 'When nothing else has worked. When you need a paradigm shift. When the old self must die for the new to be born.',
-    jungSaid: 'The Magician is the archetype of the shaman—the one who mediates between conscious and unconscious. True magic is the transformation of energy—including our own. The Magician\'s power comes from integration, from knowing their own shadow.',
+    wisdom: 'The Magician is the archetype of the shaman—the one who mediates between conscious and unconscious. True magic is the transformation of energy—including our own. The Magician\'s power comes from integration, from knowing their own shadow.',
     invitation: 'To use your insight in service of liberation, not control. To transform yourself before you try to transform others. The Magician\'s greatest gift is this: What if you looked at it this way? The cage was never locked.',
     deeperQuestion: 'Are you facilitating someone\'s transformation, or are you keeping them dependent on your insight?',
     exercise: [
@@ -298,7 +298,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Sage cuts through noise. They ask the question everyone else is avoiding. They want true answers. The Sage isn\'t satisfied with easy—they want real. They remind us that truth exists. That it can be found. That understanding is its own reward.',
     shadow: 'The Sage who fears uncertainty becomes the Dogmatist. The one who mistakes their map for the territory. Who weaponizes knowledge, hoards information, speaks in jargon to obscure. The shadow Sage already knows everything—and everyone else is wrong. They teach to feel superior, not to free.',
     lifeStage: 'When confusion demands clarity. When old answers fail. When you\'re lost and need a map. When you realize how much you don\'t know.',
-    jungSaid: 'Knowledge is not wisdom. The true Sage integrates what they know with what they don\'t. They hold paradox. They understand that the highest truth often can\'t be spoken—only pointed toward.',
+    wisdom: 'Knowledge is not wisdom. The true Sage integrates what they know with what they don\'t. They hold paradox. They understand that the highest truth often can\'t be spoken—only pointed toward.',
     invitation: 'To keep learning. To admit ignorance. To share what you know without attaching to it. The Sage\'s greatest gift is this: I don\'t know—but I\'ll find out. Here\'s what I\'ve learned. Take what helps. Leave the rest.',
     deeperQuestion: 'What would you have to admit was wrong if you truly followed the evidence?',
     exercise: [
@@ -323,7 +323,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Fool shows up at the beginning of every journey. They\'re the one with the packed bag and the empty head, ready to step off the cliff. The Fool trusts life. They say yes before they know the question. They remind us that not knowing is not a problem. It\'s the whole adventure.',
     shadow: 'The Fool who never learns becomes the Buffoon. The one who mistakes immaturity for freedom, who refuses responsibility, who\'s always the beginner because they never commit to mastery. They leap off cliffs and expect others to catch them. They call it trust; it\'s really entitlement. They never grow up, never land anywhere.',
     lifeStage: 'At the beginning of anything. When you have no idea what you\'re doing. When only a leap will do.',
-    jungSaid: 'The Fool is the archetype of the beginner\'s mind, the one who travels toward wisdom through innocence. But the journey requires integration—the Fool must eventually become something else. The one who stays Fool forever is not wise. They\'re stuck.',
+    wisdom: 'The Fool is the archetype of the beginner\'s mind, the one who travels toward wisdom through innocence. But the journey requires integration—the Fool must eventually become something else. The one who stays Fool forever is not wise. They\'re stuck.',
     invitation: 'To leap before you\'re ready. To trust that you\'ll learn on the way down. The Fool\'s greatest gift is this: I don\'t know what I\'m doing. Isn\'t it wonderful? Let\'s go.',
     deeperQuestion: 'Are you trusting the leap, or are you using the leap to avoid ever having to land?',
     exercise: [
@@ -349,7 +349,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Mentor sees the potential in others that they can\'t yet see in themselves. They give away what took them years to earn. They shorten the painful path. They know that the point of gathering wisdom is not to hoard it—it\'s to pass it on. The Mentor reminds us that we don\'t have to figure everything out alone.',
     shadow: 'The Mentor who needs to be needed becomes the Deceiver. The one who guides toward their own agenda, withholds truth to maintain influence, corrupts the student to keep them dependent. The shadow Mentor says "I\'m the only one who understands you"—and means it selfishly.',
     lifeStage: 'When someone you can help crosses your path. When you realize you have something worth giving. When the student appears and the teacher must decide.',
-    jungSaid: 'The Wise Old Man (or Woman) archetype carries our accumulated wisdom—the collective knowledge of those who came before. The mentor who has done their own work can hold space for another\'s. The one who hasn\'t will corrupt what they touch.',
+    wisdom: 'The Wise Old Man (or Woman) archetype carries our accumulated wisdom—the collective knowledge of those who came before. The mentor who has done their own work can hold space for another\'s. The one who hasn\'t will corrupt what they touch.',
     invitation: 'To give freely and let the student surpass you. To guide without controlling the destination. The Mentor\'s greatest gift is this: You don\'t need me forever. Go. Build on what I gave you.',
     deeperQuestion: 'Are you mentoring to develop them, or to feel indispensable?',
     exercise: [
@@ -377,7 +377,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Healer shows up when it hurts. Not to fix—just to be present. To sit with you in the dark. To hold space for your pain without needing it to hurry up and go away. The Healer reminds us that we don\'t need to be fixed. We need to be seen.',
     shadow: 'The Healer who won\'t heal themselves becomes the Fixer. The one who needs you to need them. Who gives and gives until they\'re empty, then resents you for taking. The shadow Healer collects wounded people like trophies—proof of their goodness, evidence of their worth. They mistake codependency for compassion.',
     lifeStage: 'When someone you love is hurting. When you\'re hurting. Any moment you\'re called to simply be there.',
-    jungSaid: 'Jung gave us the Wounded Healer—the idea that our own wounds are the source of our healing power. The doctor who\'s been sick knows how to treat the ill. Your wounds are not weaknesses. They\'re qualifications.',
+    wisdom: 'Jung gave us the Wounded Healer—the idea that our own wounds are the source of our healing power. The doctor who\'s been sick knows how to treat the ill. Your wounds are not weaknesses. They\'re qualifications.',
     invitation: 'To heal by being present, not by fixing. To let your own wounds become the source of your compassion. The Healer\'s greatest gift is this: I see you. I\'m here. You\'re not alone.',
     deeperQuestion: 'Whose pain are you carrying that isn\'t yours to carry?',
     exercise: [
@@ -403,7 +403,7 @@ export const archetypes: Archetype[] = [
     gift: 'The Shadow holds what we\'ve rejected—the parts of ourselves we were taught were unacceptable. It\'s the rage of the "patient" one, the desire of the "selfless" one, the cruelty of the "kind" one. The Shadow isn\'t the enemy. It\'s the exile. And everything we exile gains power in the dark. Integration is not the same as indulgence. It\'s ownership.',
     shadow: 'The Shadow fully expressed without integration becomes the Demon. Pure destruction—the person who acts from their worst impulses and calls it authenticity. Who destroys because the wound finally won. The Demon is not shadow work. It\'s shadow surrender.',
     lifeStage: 'When you keep attracting the same person who infuriates you. When you judge someone so harshly you can\'t look away. When you\'re disgusted by something in others that you\'ve never examined in yourself.',
-    jungSaid: 'Until you make the unconscious conscious, it will direct your life and you will call it fate. The Shadow is 90% gold. Everything you haven\'t claimed is still yours—it\'s just working against you.',
+    wisdom: 'Until you make the unconscious conscious, it will direct your life and you will call it fate. The Shadow is 90% gold. Everything you haven\'t claimed is still yours—it\'s just working against you.',
     invitation: 'To meet the parts of yourself you\'ve exiled. To own what you\'ve disowned. To know that integration doesn\'t mean you become your shadow—it means you stop being ruled by it. The Shadow\'s invitation is this: Look here. This is also you. Now what?',
     deeperQuestion: 'What quality do you most harshly judge in others? When did you decide that quality was unacceptable in yourself?',
     exercise: [

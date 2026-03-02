@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     gift: archetype?.gift ?? '',
     shadow: archetype?.shadow ?? '',
     lifeStage: archetype?.lifeStage ?? '',
-    jungSaid: archetype?.jungSaid ?? '',
+    wisdom: archetype?.wisdom ?? '',
     invitation: archetype?.invitation ?? '',
   })
 }

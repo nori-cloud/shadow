@@ -25,7 +25,7 @@ interface AnalysisResult {
   gift: string
   shadow: string
   lifeStage: string
-  jungSaid: string
+  wisdom: string
   invitation: string
 }
 
@@ -224,7 +224,7 @@ function InputView({
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
           }}>
-            Jungian Archetype Analysis
+            Archetype Analysis
           </p>
         </div>
 
