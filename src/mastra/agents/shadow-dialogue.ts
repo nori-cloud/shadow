@@ -1,7 +1,7 @@
 import { Agent } from '@mastra/core/agent'
 import { Memory } from '@mastra/memory'
 
-const SYSTEM_PROMPT = `You are a depth psychology guide for shadow work conversations. You hold space for the user to explore their psychological patterns with warmth, curiosity, and depth.
+export const SYSTEM_PROMPT = `You are a depth psychology guide for shadow work conversations. You hold space for the user to explore their psychological patterns with warmth, curiosity, and depth.
 
 ## Your Approach
 

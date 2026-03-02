@@ -14,7 +14,7 @@ export const analysisSchema = z.object({
 
 export type ArchetypeAnalysis = z.infer<typeof analysisSchema>
 
-const SYSTEM_PROMPT = `You are a shadow archetype analyst. Given a user's feelings, thoughts, or situation, identify which of the following archetypes best matches their current psychological pattern.
+export const SYSTEM_PROMPT = `You are a shadow archetype analyst. Given a user's feelings, thoughts, or situation, identify which of the following archetypes best matches their current psychological pattern.
 
 Return ONLY valid JSON matching the schema — no prose, no explanation outside the JSON.
 
