@@ -102,7 +102,7 @@ export default function ShadowPage() {
         color: '#e8e0d4',
         fontFamily: 'var(--font-geist-sans)',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'clip',
       }}
     >
       {/* Grain overlay */}
@@ -604,17 +604,21 @@ function DialogueView({
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    @page { margin: 2.5cm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html { background: #0c0b09; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { margin: 0; }
     body {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      background: #faf7f2;
-      color: #1a1814;
+      background: #0c0b09;
+      color: #e8e0d4;
       max-width: 560px;
       margin: 0 auto;
-      padding: 4rem 0;
+      padding: 4rem 2rem;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
+    }
+    @media print {
+      html, body { background: #0c0b09 !important; color: #e8e0d4 !important; }
     }
     .mark {
       display: flex;
@@ -636,27 +640,27 @@ function DialogueView({
       font-size: 0.7rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: #9a8e7e;
+      color: #7a6e60;
       font-family: Georgia, serif;
     }
     h1 {
       font-size: 2.75rem;
       font-weight: 300;
       letter-spacing: 0.01em;
-      color: #1a1814;
+      color: #e8e0d4;
       line-height: 1;
       margin-bottom: 0.375rem;
     }
     .date {
       font-size: 0.875rem;
-      color: #9a8e7e;
+      color: #7a6e60;
       font-style: italic;
       margin-bottom: 3rem;
     }
     .divider {
       width: 100%;
       height: 1px;
-      background: linear-gradient(to right, rgba(196,152,90,0.5), transparent);
+      background: linear-gradient(to right, rgba(196,152,90,0.4), transparent);
       margin-bottom: 3rem;
     }
     .label {
@@ -670,7 +674,7 @@ function DialogueView({
     .archetype {
       font-size: 1.5rem;
       font-weight: 600;
-      color: #1a1814;
+      color: #e8e0d4;
       margin-bottom: 2.5rem;
       letter-spacing: 0.01em;
     }
@@ -679,7 +683,7 @@ function DialogueView({
       font-style: italic;
       font-weight: 300;
       line-height: 1.8;
-      color: #2e2820;
+      color: #b8aa98;
       margin-bottom: 3.5rem;
     }
     .footer {
@@ -687,13 +691,13 @@ function DialogueView({
       align-items: center;
       gap: 0.5rem;
       padding-top: 1.5rem;
-      border-top: 1px solid rgba(196,152,90,0.25);
+      border-top: 1px solid rgba(196,152,90,0.2);
     }
     .footer-text {
       font-size: 0.7rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #b8a898;
+      color: #4a4338;
       font-family: Georgia, serif;
     }
   </style>
