@@ -553,7 +553,7 @@ function DialogueView({
   // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, reflection])
 
   const handleSend = () => {
     const text = inputValue.trim()
