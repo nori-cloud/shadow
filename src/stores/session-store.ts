@@ -11,8 +11,10 @@ const generateId = () => crypto.randomUUID()
 
 const COOKIE_NAME = 'chat-session'
 
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 days in seconds
+
 const setSessionCookie = (id: string) => {
-  document.cookie = `${COOKIE_NAME}=${id}; path=/; samesite=lax`
+  document.cookie = `${COOKIE_NAME}=${id}; path=/; samesite=lax; max-age=${COOKIE_MAX_AGE}`
 }
 
 export const useSessionStore = create<SessionState>()(

@@ -31,9 +31,16 @@ export default function ChatPage() {
   const { getOrCreateSessionId, clearSession } = useSessionStore()
   const [sessionId, setSessionId] = useState<string | null>(null)
 
-  // Initialize session ID on mount (sets cookie automatically)
+  // Initialize session ID on mount, waiting for Zustand persist hydration
   useEffect(() => {
-    setSessionId(getOrCreateSessionId())
+    if (useSessionStore.persist.hasHydrated()) {
+      setSessionId(getOrCreateSessionId())
+    } else {
+      const unsub = useSessionStore.persist.onFinishHydration(() => {
+        setSessionId(getOrCreateSessionId())
+      })
+      return unsub
+    }
   }, [getOrCreateSessionId])
 
   const { messages, setMessages, sendMessage, status } = useChat({
