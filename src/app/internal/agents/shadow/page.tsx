@@ -54,19 +54,22 @@ export default function ShadowPlayground() {
       {/* Left panel — prompt editor */}
       <div className="w-1/2 flex flex-col gap-3 p-4 border-r border-gray-200">
         <h2 className="font-semibold text-sm uppercase tracking-wide text-gray-500">System Prompt</h2>
-        <div className="flex gap-2">
-          <button
-            onClick={() => loadPreset('analyst')}
-            className="px-3 py-1 text-sm rounded border border-gray-300 hover:bg-gray-100"
-          >
-            Shadow Analyst
-          </button>
-          <button
-            onClick={() => loadPreset('dialogue')}
-            className="px-3 py-1 text-sm rounded border border-gray-300 hover:bg-gray-100"
-          >
-            Shadow Dialogue
-          </button>
+        <div className="flex flex-col gap-1">
+          <span className="text-xs text-gray-500">Load preset into editor</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => loadPreset('analyst')}
+              className="px-3 py-1 text-sm rounded border border-gray-600 hover:bg-white/10 focus:outline-none focus:ring-1 focus:ring-gray-500"
+            >
+              Shadow Analyst
+            </button>
+            <button
+              onClick={() => loadPreset('dialogue')}
+              className="px-3 py-1 text-sm rounded border border-gray-600 hover:bg-white/10 focus:outline-none focus:ring-1 focus:ring-gray-500"
+            >
+              Shadow Dialogue
+            </button>
+          </div>
         </div>
         <textarea
           value={systemPrompt}
