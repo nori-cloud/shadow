@@ -102,7 +102,7 @@ export default function ShadowPage() {
         color: '#e8e0d4',
         fontFamily: 'var(--font-geist-sans)',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'clip',
       }}
     >
       {/* Grain overlay */}
@@ -532,6 +532,9 @@ function DialogueView({
   const [inputValue, setInputValue] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const seeded = useRef(false)
+  const [reflection, setReflection] = useState<{ insight: string } | null>(null)
+  const [isSummarising, setIsSummarising] = useState(false)
+  const [summaryError, setSummaryError] = useState<string | null>(null)
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: '/api/shadow/chat' }),
@@ -550,13 +553,187 @@ function DialogueView({
   // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, reflection])
 
   const handleSend = () => {
     const text = inputValue.trim()
     if (!text || isStreaming) return
     sendMessage({ text })
     setInputValue('')
+  }
+
+  const handleSummary = async () => {
+    if (isSummarising || messages.length < 2) return
+    setSummaryError(null)
+    setIsSummarising(true)
+    try {
+      // Extract text content from AI SDK UIMessage format
+      const formatted = messages.map(msg => {
+        const textPart = msg.parts?.find((p) => p.type === 'text') as { type: 'text'; text: string } | undefined
+        return { role: msg.role, content: textPart?.text ?? '' }
+      }).filter(m => m.content.trim())
+
+      const res = await fetch('/api/shadow/summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: formatted, archetypeName: analysis.archetypeName }),
+      })
+      if (!res.ok) throw new Error('Summary failed')
+      const data = await res.json()
+      setReflection({ insight: data.insight })
+    } catch {
+      setSummaryError('Could not generate summary. Try again.')
+    } finally {
+      setIsSummarising(false)
+    }
+  }
+
+  const escapeHtml = (str: string) =>
+    str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+
+  const handleDownload = (insight: string, archetypeName: string) => {
+    const safeArchetype = escapeHtml(archetypeName)
+    const safeInsight = escapeHtml(insight)
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    const win = window.open('', '_blank')
+    if (!win) return
+    win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+  <title>The Shadow – Session Reflection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    html { background: #0c0b09; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { margin: 0; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: #0c0b09;
+      color: #e8e0d4;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    @media print {
+      html, body { background: #0c0b09 !important; color: #e8e0d4 !important; }
+    }
+    .mark {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-bottom: 2.5rem;
+    }
+    .mark-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(196,152,90,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mark-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7a6e60;
+      font-family: Georgia, serif;
+    }
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      color: #e8e0d4;
+      line-height: 1;
+      margin-bottom: 0.375rem;
+    }
+    .date {
+      font-size: 0.875rem;
+      color: #7a6e60;
+      font-style: italic;
+      margin-bottom: 3rem;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, rgba(196,152,90,0.4), transparent);
+      margin-bottom: 3rem;
+    }
+    .label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c4985a;
+      margin-bottom: 0.5rem;
+      font-family: Georgia, serif;
+    }
+    .archetype {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #e8e0d4;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.01em;
+    }
+    .insight {
+      font-size: 1.375rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #b8aa98;
+      margin-bottom: 3.5rem;
+    }
+    .footer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(196,152,90,0.2);
+    }
+    .footer-text {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #4a4338;
+      font-family: Georgia, serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="mark">
+    <div class="mark-circle">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="5" cy="5" r="2" stroke="#c4985a" stroke-width="1"/>
+        <line x1="5" y1="0" x2="5" y2="2.2" stroke="#c4985a" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+        <line x1="5" y1="7.8" x2="5" y2="10" stroke="#c4985a" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+        <line x1="0" y1="5" x2="2.2" y2="5" stroke="#c4985a" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+        <line x1="7.8" y1="5" x2="10" y2="5" stroke="#c4985a" stroke-width="0.8" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
+    <span class="mark-label">The Shadow</span>
+  </div>
+  <h1>Session<br>Reflection</h1>
+  <p class="date">${date}</p>
+  <div class="divider"></div>
+  <p class="label">Archetype</p>
+  <p class="archetype">${safeArchetype}</p>
+  <p class="label">What emerged</p>
+  <p class="insight">${safeInsight}</p>
+  <div class="footer">
+    <div class="mark-circle" style="width:18px;height:18px;">
+      <svg width="7" height="7" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="5" cy="5" r="2" stroke="#c4985a" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <span class="footer-text">Generated by The Shadow</span>
+  </div>
+  <script>window.onload = () => { window.print(); }<\/script>
+</body>
+</html>`)
+    win.document.close()
   }
 
   return (
@@ -568,7 +745,7 @@ function DialogueView({
       padding: '2rem 1.5rem',
     }}>
       <div style={{ width: '100%', maxWidth: '640px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', position: 'sticky', top: 0, zIndex: 10, background: '#0c0b09', paddingTop: '1rem', paddingBottom: '1rem', marginTop: '-1rem' }}>
           <button
             onClick={onReset}
             style={{
@@ -590,6 +767,36 @@ function DialogueView({
           >
             ← Start over
           </button>
+          <button
+            onClick={handleSummary}
+            disabled={isSummarising || messages.length < 2}
+            style={{
+              background: 'none',
+              border: '1px solid rgba(196,152,90,0.25)',
+              borderRadius: '6px',
+              color: isSummarising ? '#4a4338' : '#7a6e60',
+              fontSize: '0.75rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              padding: '0.3rem 0.75rem',
+              cursor: isSummarising || messages.length < 2 ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s',
+              fontFamily: 'var(--font-geist-sans)',
+            }}
+            onMouseEnter={e => { if (!isSummarising) e.currentTarget.style.borderColor = 'rgba(196,152,90,0.5)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(196,152,90,0.25)' }}
+          >
+            {isSummarising ? 'Reading…' : 'Summary'}
+          </button>
+          {summaryError && (
+            <p style={{
+              fontSize: '0.7rem',
+              color: '#c46060',
+              fontFamily: 'var(--font-geist-sans)',
+            }}>
+              {summaryError}
+            </p>
+          )}
           <p style={{
             fontFamily: 'var(--font-cormorant)',
             fontSize: '1rem',
@@ -645,6 +852,67 @@ function DialogueView({
               }}>
                 …
               </div>
+            </div>
+          )}
+          {reflection && (
+            <div style={{
+              background: '#0f0e0b',
+              border: '1px solid rgba(196,152,90,0.2)',
+              borderRadius: '12px',
+              padding: '1.5rem',
+              marginTop: '0.5rem',
+            }}>
+              <p style={{
+                fontSize: '0.7rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#c4985a',
+                marginBottom: '0.75rem',
+                fontFamily: 'var(--font-geist-sans)',
+              }}>
+                ✦ Session Reflection
+              </p>
+              <p style={{
+                fontSize: '0.75rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#4a4338',
+                marginBottom: '0.5rem',
+                fontFamily: 'var(--font-geist-sans)',
+              }}>
+                {analysis.archetypeName}
+              </p>
+              <p style={{
+                fontFamily: 'var(--font-cormorant)',
+                fontSize: '1.125rem',
+                fontStyle: 'italic',
+                color: '#b8aa98',
+                lineHeight: 1.75,
+                margin: '0 0 1.25rem',
+                fontWeight: 300,
+              }}>
+                {reflection.insight}
+              </p>
+              <button
+                onClick={() => handleDownload(reflection.insight, analysis.archetypeName)}
+                style={{
+                  background: 'none',
+                  border: '1px solid rgba(196,152,90,0.25)',
+                  borderRadius: '6px',
+                  color: '#7a6e60',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  padding: '0.3rem 0.75rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  fontFamily: 'var(--font-geist-sans)',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(196,152,90,0.5)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(196,152,90,0.25)' }}
+              >
+                Download
+              </button>
             </div>
           )}
           <div ref={bottomRef} />
