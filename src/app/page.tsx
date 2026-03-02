@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Cormorant_Garamond } from 'next/font/google'
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -27,7 +29,7 @@ interface AnalysisResult {
   invitation: string
 }
 
-type AppState = 'input' | 'card'
+type AppState = 'input' | 'card' | 'dialogue'
 
 // ─── Emotion Tags ─────────────────────────────────────────────────────────────
 
@@ -42,6 +44,7 @@ export default function ShadowPage() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [isAnalysing, setIsAnalysing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [sessionId, setSessionId] = useState<string | null>(null)
 
   const handleEmotionTag = (tag: string) => {
     setSelectedTags(prev => {
@@ -74,12 +77,20 @@ export default function ShadowPage() {
     }
   }
 
+  const handleGoDeeper = () => {
+    const id = crypto.randomUUID()
+    document.cookie = `shadow-session=${id}; path=/`
+    setSessionId(id)
+    setAppState('dialogue')
+  }
+
   const handleReset = () => {
     setAppState('input')
     setAnalysis(null)
     setInputText('')
     setSelectedTags(new Set())
     setError(null)
+    setSessionId(null)
   }
 
   return (
@@ -133,6 +144,13 @@ export default function ShadowPage() {
         )}
         {appState === 'card' && analysis && (
           <CardView
+            analysis={analysis}
+            onReset={handleReset}
+            onGoDeeper={handleGoDeeper}
+          />
+        )}
+        {appState === 'dialogue' && analysis && sessionId && (
+          <DialogueView
             analysis={analysis}
             onReset={handleReset}
           />
@@ -320,9 +338,11 @@ function InputView({
 function CardView({
   analysis,
   onReset,
+  onGoDeeper,
 }: {
   analysis: AnalysisResult
   onReset: () => void
+  onGoDeeper: () => void
 }) {
   return (
     <div style={{
@@ -464,6 +484,218 @@ function CardView({
               ))}
             </ol>
           </div>
+
+          <div style={{ borderTop: '1px solid rgba(196,152,90,0.1)', marginTop: '2rem', paddingTop: '2rem' }}>
+            <button
+              onClick={onGoDeeper}
+              style={{
+                width: '100%',
+                padding: '0.875rem',
+                background: 'rgba(196,152,90,0.08)',
+                border: '1px solid rgba(196,152,90,0.3)',
+                borderRadius: '8px',
+                color: '#c4985a',
+                fontSize: '0.9375rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-geist-sans)',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(196,152,90,0.14)'
+                e.currentTarget.style.borderColor = 'rgba(196,152,90,0.5)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(196,152,90,0.08)'
+                e.currentTarget.style.borderColor = 'rgba(196,152,90,0.3)'
+              }}
+            >
+              Go Deeper
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Dialogue View ─────────────────────────────────────────────────────────────
+
+function DialogueView({
+  analysis,
+  onReset,
+}: {
+  analysis: AnalysisResult
+  onReset: () => void
+}) {
+  const [inputValue, setInputValue] = useState('')
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const seeded = useRef(false)
+
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/shadow/chat' }),
+  })
+
+  const isStreaming = status === 'streaming' || status === 'submitted'
+
+  // Seed the conversation with archetype context on first mount
+  useEffect(() => {
+    if (seeded.current) return
+    seeded.current = true
+    const seed = `I just received this archetype reading:\n\nArchetype: ${analysis.archetypeName} (Shadow: ${analysis.shadowName})\n\n${analysis.matchReason}\n\nThe deeper question offered was: "${analysis.deeperQuestion}"\n\nI'd like to explore this further.`
+    sendMessage({ text: seed })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  const handleSend = () => {
+    const text = inputValue.trim()
+    if (!text || isStreaming) return
+    sendMessage({ text })
+    setInputValue('')
+  }
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '2rem 1.5rem',
+    }}>
+      <div style={{ width: '100%', maxWidth: '640px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+          <button
+            onClick={onReset}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#4a4338',
+              fontSize: '0.8125rem',
+              cursor: 'pointer',
+              letterSpacing: '0.04em',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'color 0.15s',
+              fontFamily: 'var(--font-geist-sans)',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#7a6e60' }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#4a4338' }}
+          >
+            ← Start over
+          </button>
+          <p style={{
+            fontFamily: 'var(--font-cormorant)',
+            fontSize: '1rem',
+            fontStyle: 'italic',
+            color: '#7a6e60',
+            margin: 0,
+          }}>
+            {analysis.archetypeName}
+          </p>
+        </div>
+
+        {/* Messages */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          {messages.map((msg) => {
+            const textPart = (msg.parts?.find((p) => p.type === 'text') as { type: 'text'; text: string } | undefined)
+            const text = textPart?.text ?? ''
+            const isUser = msg.role === 'user'
+            // Hide the seeded first user message
+            if (isUser && messages.indexOf(msg) === 0) return null
+            return (
+              <div key={msg.id} style={{
+                display: 'flex',
+                justifyContent: isUser ? 'flex-end' : 'flex-start',
+              }}>
+                <div style={{
+                  maxWidth: '85%',
+                  padding: '0.875rem 1.125rem',
+                  borderRadius: isUser ? '12px 12px 4px 12px' : '12px 12px 12px 4px',
+                  background: isUser ? 'rgba(196,152,90,0.1)' : '#15130f',
+                  border: `1px solid ${isUser ? 'rgba(196,152,90,0.2)' : 'rgba(196,152,90,0.08)'}`,
+                  fontSize: '0.9375rem',
+                  lineHeight: 1.7,
+                  color: isUser ? '#c4985a' : '#b8aa98',
+                  fontFamily: 'var(--font-geist-sans)',
+                  whiteSpace: 'pre-wrap',
+                }}>
+                  {text}
+                </div>
+              </div>
+            )
+          })}
+          {isStreaming && messages[messages.length - 1]?.role === 'user' && (
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div style={{
+                padding: '0.875rem 1.125rem',
+                borderRadius: '12px 12px 12px 4px',
+                background: '#15130f',
+                border: '1px solid rgba(196,152,90,0.08)',
+                color: '#4a4338',
+                fontSize: '0.875rem',
+                fontStyle: 'italic',
+                fontFamily: 'var(--font-geist-sans)',
+              }}>
+                …
+              </div>
+            </div>
+          )}
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Input */}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-end' }}>
+          <textarea
+            value={inputValue}
+            onChange={e => setInputValue(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleSend() }}
+            placeholder="Respond…"
+            disabled={isStreaming}
+            rows={2}
+            style={{
+              flex: 1,
+              background: '#15130f',
+              border: '1px solid rgba(196,152,90,0.15)',
+              borderRadius: '8px',
+              padding: '0.75rem 1rem',
+              color: '#e8e0d4',
+              fontSize: '0.9375rem',
+              lineHeight: 1.6,
+              resize: 'none',
+              outline: 'none',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.2s',
+              fontFamily: 'var(--font-geist-sans)',
+            }}
+            onFocus={e => { e.target.style.borderColor = 'rgba(196,152,90,0.4)' }}
+            onBlur={e => { e.target.style.borderColor = 'rgba(196,152,90,0.15)' }}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!inputValue.trim() || isStreaming}
+            style={{
+              padding: '0.75rem 1.25rem',
+              background: !inputValue.trim() || isStreaming ? 'rgba(196,152,90,0.05)' : 'rgba(196,152,90,0.12)',
+              border: '1px solid rgba(196,152,90,0.3)',
+              borderRadius: '8px',
+              color: !inputValue.trim() || isStreaming ? '#4a4338' : '#c4985a',
+              fontSize: '0.875rem',
+              letterSpacing: '0.04em',
+              cursor: !inputValue.trim() || isStreaming ? 'not-allowed' : 'pointer',
+              transition: 'all 0.2s',
+              fontFamily: 'var(--font-geist-sans)',
+              flexShrink: 0,
+            }}
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
