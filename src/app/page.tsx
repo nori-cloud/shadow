@@ -576,6 +576,7 @@ function DialogueView({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: formatted, archetypeName: analysis.archetypeName }),
       })
+      if (!res.ok) throw new Error('Summary failed')
       const data = await res.json()
       setReflection({ insight: data.insight })
     } finally {
