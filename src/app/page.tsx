@@ -33,7 +33,7 @@ type AppState = 'input' | 'card' | 'dialogue'
 
 // ─── Emotion Tags ─────────────────────────────────────────────────────────────
 
-const EMOTION_TAGS = ['Lonely', 'Irritable', 'Judgmental', 'Overwhelmed', 'Empty', 'Stuck']
+const EMOTION_TAGS = ['Lonely', 'Irritable', 'Judgmental', 'Overwhelmed', 'Empty', 'Stuck', 'Needy']
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
