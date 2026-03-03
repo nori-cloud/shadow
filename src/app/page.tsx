@@ -37,6 +37,19 @@ const EMOTION_TAGS = ['Lonely', 'Irritable', 'Judgmental', 'Overwhelmed', 'Empty
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
+const SHADOW_LS_KEY = 'shadow-session'
+const SHADOW_COOKIE_MAX_AGE = 60 * 60 * 24 * 7 // 7 days
+
+function saveShadowSession(id: string, result: AnalysisResult) {
+  localStorage.setItem(SHADOW_LS_KEY, JSON.stringify({ sessionId: id, analysis: result }))
+  document.cookie = `shadow-session=${id}; path=/; samesite=lax; max-age=${SHADOW_COOKIE_MAX_AGE}`
+}
+
+function clearShadowSession() {
+  localStorage.removeItem(SHADOW_LS_KEY)
+  document.cookie = `shadow-session=; path=/; max-age=0`
+}
+
 export default function ShadowPage() {
   const [appState, setAppState] = useState<AppState>('input')
   const [inputText, setInputText] = useState('')
@@ -45,6 +58,25 @@ export default function ShadowPage() {
   const [isAnalysing, setIsAnalysing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [isRestored, setIsRestored] = useState(false)
+
+  // Restore session from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(SHADOW_LS_KEY)
+    if (!stored) return
+    try {
+      const { sessionId: id, analysis: savedAnalysis } = JSON.parse(stored)
+      if (id && savedAnalysis) {
+        document.cookie = `shadow-session=${id}; path=/; samesite=lax; max-age=${SHADOW_COOKIE_MAX_AGE}`
+        setSessionId(id)
+        setAnalysis(savedAnalysis)
+        setAppState('dialogue')
+        setIsRestored(true)
+      }
+    } catch {
+      localStorage.removeItem(SHADOW_LS_KEY)
+    }
+  }, [])
 
   const handleEmotionTag = (tag: string) => {
     setSelectedTags(prev => {
@@ -79,18 +111,21 @@ export default function ShadowPage() {
 
   const handleGoDeeper = () => {
     const id = crypto.randomUUID()
-    document.cookie = `shadow-session=${id}; path=/`
+    saveShadowSession(id, analysis!)
     setSessionId(id)
+    setIsRestored(false)
     setAppState('dialogue')
   }
 
   const handleReset = () => {
+    clearShadowSession()
     setAppState('input')
     setAnalysis(null)
     setInputText('')
     setSelectedTags(new Set())
     setError(null)
     setSessionId(null)
+    setIsRestored(false)
   }
 
   return (
@@ -153,6 +188,7 @@ export default function ShadowPage() {
           <DialogueView
             analysis={analysis}
             onReset={handleReset}
+            isRestored={isRestored}
           />
         )}
       </div>
@@ -525,9 +561,11 @@ function CardView({
 function DialogueView({
   analysis,
   onReset,
+  isRestored,
 }: {
   analysis: AnalysisResult
   onReset: () => void
+  isRestored: boolean
 }) {
   const [inputValue, setInputValue] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -536,18 +574,25 @@ function DialogueView({
   const [isSummarising, setIsSummarising] = useState(false)
   const [summaryError, setSummaryError] = useState<string | null>(null)
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, setMessages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: '/api/shadow/chat' }),
   })
 
   const isStreaming = status === 'streaming' || status === 'submitted'
 
-  // Seed the conversation with archetype context on first mount
+  // On restored session: fetch existing messages. On fresh session: seed with archetype context.
   useEffect(() => {
     if (seeded.current) return
     seeded.current = true
-    const seed = `I just received this archetype reading:\n\nArchetype: ${analysis.archetypeName} (Shadow: ${analysis.shadowName})\n\n${analysis.matchReason}\n\nThe deeper question offered was: "${analysis.deeperQuestion}"\n\nI'd like to explore this further.`
-    sendMessage({ text: seed })
+    if (isRestored) {
+      fetch('/api/shadow/chat')
+        .then(r => r.json())
+        .then(data => { if (!data.error) setMessages([...data]) })
+        .catch(() => {})
+    } else {
+      const seed = `I just received this archetype reading:\n\nArchetype: ${analysis.archetypeName} (Shadow: ${analysis.shadowName})\n\n${analysis.matchReason}\n\nThe deeper question offered was: "${analysis.deeperQuestion}"\n\nI'd like to explore this further.`
+      sendMessage({ text: seed })
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-scroll to bottom
